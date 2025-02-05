@@ -33,6 +33,12 @@ struct CatchHandler: ViewModifier {
     }
 }
 
+public extension View {
+    func withCatcher() -> some View {
+        modifier(CatchHandler())
+    }
+}
+
 #Preview {
     @Previewable @State var scope = CatchScope()
     
