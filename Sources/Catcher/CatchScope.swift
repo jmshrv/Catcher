@@ -22,9 +22,19 @@ public final class CatchScope {
     
     init() {}
     
-    public func withCatchScope(_ throwing: () throws -> Void) {
-        do {
+    public func withCatchScope(_ throwing: @escaping () throws -> Void) {
+        func asyncWrapper() async throws {
             try throwing()
+        }
+        
+        Task {
+            await withCatchScopeAsync(asyncWrapper)
+        }
+    }
+    
+    public func withCatchScopeAsync(_ throwing: () async throws -> Void) async {
+        do {
+            try await throwing()
         } catch {
             let dateOccurred = Date()
             let stack = Thread.callStackSymbols
