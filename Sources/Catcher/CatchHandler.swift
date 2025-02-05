@@ -22,10 +22,9 @@ struct CatchHandler: ViewModifier {
                 .frame(maxHeight: .infinity)
                 .environment(scope)
             
-            if let errorId = scope.errors.keys.first,
-               let error = scope.errors[errorId] {
+            if let error = scope.errors.values.first {
                 ErrorChip(error: error, shownError: $shownError)
-                    .transition(.move(edge: .top))
+                    .transition(.blurReplace)
             }
         }
         .sheet(item: $shownError) { error in
