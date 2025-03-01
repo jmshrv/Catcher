@@ -22,17 +22,17 @@ public final class CatchScope {
     
     init() {}
     
-    public func withCatchScope(_ throwing: @escaping () throws -> Void) {
+    public func withCatchScope(_ throwing: @escaping () throws -> Void) throws {
         func asyncWrapper() async throws {
             try throwing()
         }
         
         Task {
-            await withCatchScopeAsync(asyncWrapper)
+            try await withCatchScopeAsync(asyncWrapper)
         }
     }
     
-    public func withCatchScopeAsync(_ throwing: () async throws -> Void) async {
+    public func withCatchScopeAsync(_ throwing: () async throws -> Void) async throws {
         do {
             try await throwing()
         } catch {
@@ -59,6 +59,8 @@ public final class CatchScope {
                     errors.removeValue(forKey: dateOccurred)
                 }
             }
+            
+            throw error
         }
     }
     
