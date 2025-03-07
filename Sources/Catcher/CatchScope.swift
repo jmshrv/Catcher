@@ -22,8 +22,8 @@ public final class CatchScope {
     
     init() {}
     
-    public func withCatchScope(_ throwing: @escaping () throws -> Void) {
-        func asyncWrapper() async throws {
+    public func withCatchScope(_ throwing: @Sendable @escaping () throws -> Void) {
+        @Sendable func asyncWrapper() async throws {
             try throwing()
         }
         
@@ -32,7 +32,7 @@ public final class CatchScope {
         }
     }
     
-    public func withCatchScopeAsync(_ throwing: () async throws -> Void) async {
+    public func withCatchScopeAsync(_ throwing: @Sendable () async throws -> Void) async {
         do {
             try await throwing()
         } catch {
